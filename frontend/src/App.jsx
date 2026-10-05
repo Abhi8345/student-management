@@ -22,6 +22,7 @@ const api = axios.create({
 });
 
 const emptyForm = { name: "", email: "", course: "", age: "" };
+const commonCourses = ["BTech", "MBA", "MCA", "BCA", "BBA", "MTech", "MSc", "BSc", "MCom", "BCom", "MA", "BA"];
 
 function initials(name = "") {
   return name
@@ -32,12 +33,21 @@ function initials(name = "") {
     .join("");
 }
 
+function formatDate(value) {
+  if (!value) return "Not available";
+  const date = new Date(value);
+  return Number.isNaN(date.getTime())
+    ? "Not available"
+    : new Intl.DateTimeFormat(undefined, { dateStyle: "medium" }).format(date);
+}
+
 function App() {
   const [students, setStudents] = useState([]);
   const [query, setQuery] = useState("");
   const [courseFilter, setCourseFilter] = useState("All courses");
   const [sortOrder, setSortOrder] = useState("asc");
   const [modalOpen, setModalOpen] = useState(false);
+  const [profileStudent, setProfileStudent] = useState(null);
   const [editingStudent, setEditingStudent] = useState(null);
   const [form, setForm] = useState(emptyForm);
   const [loading, setLoading] = useState(true);
@@ -89,6 +99,7 @@ function App() {
   }
 
   function openEditModal(student) {
+    setProfileStudent(null);
     setEditingStudent(student);
     setForm({
       name: student.name,
@@ -262,7 +273,7 @@ function App() {
                       <td>
                         <div className="student-cell">
                           <div className={`student-avatar avatar-${index % 5}`}>{initials(student.name)}</div>
-                          <div className="student-name">{student.name}</div>
+                          <button className="student-name student-name-button" onClick={() => setProfileStudent(student)}>{student.name}</button>
                         </div>
                       </td>
                       <td><span className="email-cell"><Mail size={14} /> {student.email}</span></td>
@@ -297,6 +308,35 @@ function App() {
         </section>
       </main>
 
+      {profileStudent && !modalOpen && (
+        <div className="modal-backdrop" role="presentation" onMouseDown={(event) => {
+          if (event.target === event.currentTarget) setProfileStudent(null);
+        }}>
+          <section className="student-modal student-detail-modal" role="dialog" aria-modal="true" aria-labelledby="profile-title">
+            <div className="modal-heading">
+              <div><div className="eyebrow">STUDENT RECORD</div><h2 id="profile-title">Student information</h2></div>
+              <button className="icon-button" onClick={() => setProfileStudent(null)} aria-label="Close student information"><X size={19} /></button>
+            </div>
+            <div className="profile-identity">
+              <div className="profile-avatar">{initials(profileStudent.name)}</div>
+              <div><strong>{profileStudent.name}</strong><span>{profileStudent.course}</span></div>
+            </div>
+            <dl className="profile-details">
+              <div><dt>Email address</dt><dd>{profileStudent.email}</dd></div>
+              <div><dt>Course</dt><dd>{profileStudent.course}</dd></div>
+              <div><dt>Age</dt><dd>{profileStudent.age} years</dd></div>
+              <div><dt>Student ID</dt><dd className="profile-id">{profileStudent._id}</dd></div>
+              <div><dt>Record created</dt><dd>{formatDate(profileStudent.createdAt)}</dd></div>
+              <div><dt>Last updated</dt><dd>{formatDate(profileStudent.updatedAt)}</dd></div>
+            </dl>
+            <div className="modal-actions profile-actions">
+              <button className="button button-cancel" onClick={() => setProfileStudent(null)}>Close</button>
+              <button className="button button-primary" onClick={() => openEditModal(profileStudent)}><Pencil size={15} /> Edit student</button>
+            </div>
+          </section>
+        </div>
+      )}
+
       {modalOpen && (
         <div className="modal-backdrop" role="presentation" onMouseDown={(event) => {
           if (event.target === event.currentTarget && !saving) setModalOpen(false);
@@ -311,7 +351,7 @@ function App() {
               <label className="form-field">Full name<input required maxLength="100" autoFocus placeholder="e.g. Rahul Sharma" value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} /></label>
               <label className="form-field">Email address<input required type="email" placeholder="name@college.edu" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} /></label>
               <div className="form-row">
-                <label className="form-field">Course<input required maxLength="100" placeholder="e.g. MCA" value={form.course} onChange={(event) => setForm({ ...form, course: event.target.value })} /></label>
+                <label className="form-field">Course<select className="course-select" required value={form.course} onChange={(event) => setForm({ ...form, course: event.target.value })}><option value="" disabled>Select a course</option>{[...new Set([...commonCourses, ...(form.course && !commonCourses.includes(form.course) ? [form.course] : [])])].map((course) => <option key={course} value={course}>{course}</option>)}</select></label>
                 <label className="form-field">Age<input required type="number" min="1" max="120" step="1" placeholder="22" value={form.age} onChange={(event) => setForm({ ...form, age: event.target.value })} /></label>
               </div>
               {error && <div className="form-error" role="alert">{error}</div>}

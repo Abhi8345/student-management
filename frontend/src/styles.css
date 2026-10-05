@@ -111,6 +111,8 @@ td { height: 58px; padding: 0 14px; border-top: 1px solid #f0f2ef; color: #64716
 .avatar-3 { color: #8b6b9e; background: #f0e9f4; }
 .avatar-4 { color: #9c7a3e; background: #f5efdd; }
 .student-name { color: #35433c; font-size: 11px; font-weight: 600; }
+.student-name-button { padding: 0; background: none; border: 0; text-align: left; }
+.student-name-button:hover { color: var(--green); text-decoration: underline; text-underline-offset: 3px; }
 .email-cell { display: inline-flex; align-items: center; gap: 7px; color: #7d8982; }
 .email-cell svg { color: #a3ada6; }
 .course-tag { display: inline-block; padding: 5px 8px; color: #47705d; background: #eef5ef; border-radius: 4px; font-size: 10px; font-weight: 600; }
@@ -135,12 +137,26 @@ td { height: 58px; padding: 0 14px; border-top: 1px solid #f0f2ef; color: #64716
 
 .modal-backdrop { position: fixed; inset: 0; z-index: 5; display: grid; place-items: center; padding: 20px; background: #17221dcc; animation: fade-in .15s ease-out; }
 .student-modal { width: min(100%, 460px); padding: 24px; background: #fff; border-radius: 8px; box-shadow: 0 22px 70px #14241d38; animation: rise-in .18s ease-out; }
+.student-detail-modal { width: min(100%, 500px); }
 .modal-heading { display: flex; align-items: flex-start; justify-content: space-between; }
 .modal-heading h2 { margin-top: 5px; color: #26352e; font: 700 20px 'Manrope', sans-serif; }
 .modal-intro { margin: 8px 0 21px; color: #838e87; font-size: 11px; }
+.profile-identity { display: flex; align-items: center; gap: 12px; margin: 18px 0 4px; padding-bottom: 16px; border-bottom: 1px solid #edf0ec; }
+.profile-avatar { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 50%; color: #47705d; background: #eaf2eb; font: 700 13px 'Manrope', sans-serif; }
+.profile-identity > div:last-child { display: grid; gap: 3px; }
+.profile-identity strong { color: #35433c; font: 700 13px 'Manrope', sans-serif; }
+.profile-identity span { color: #7f8b84; font-size: 11px; }
+.profile-details { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0; }
+.profile-details > div { min-width: 0; padding: 12px 8px 11px 0; border-bottom: 1px solid #f0f2ef; }
+.profile-details dt { margin-bottom: 5px; color: #929d96; font-size: 10px; }
+.profile-details dd { margin: 0; color: #435149; font-size: 11px; font-weight: 600; overflow-wrap: anywhere; }
+.profile-details .profile-id { color: #76847c; font-size: 10px; font-weight: 500; }
+.profile-actions { margin-top: 17px; }
 .form-field { display: grid; gap: 7px; margin-bottom: 15px; color: #516058; font-size: 11px; font-weight: 600; }
 .form-field input { width: 100%; height: 39px; padding: 0 11px; color: #35433c; background: #fff; border: 1px solid #e1e7e1; border-radius: 5px; outline: 0; font-size: 12px; font-weight: 400; }
+.form-field select { width: 100%; height: 39px; padding: 0 10px; color: #35433c; background: #fff; border: 1px solid #e1e7e1; border-radius: 5px; outline: 0; font-size: 12px; font-weight: 400; }
 .form-field input:focus { border-color: #7eaa91; box-shadow: 0 0 0 3px #176b5510; }
+.form-field select:focus { border-color: #7eaa91; box-shadow: 0 0 0 3px #176b5510; }
 .form-field input::placeholder { color: #b1b9b4; }
 .form-row { display: grid; grid-template-columns: 1fr 110px; gap: 13px; }
 .form-error { margin: 0 0 14px; padding: 9px 10px; color: #9a5143; background: #fff1ed; border-radius: 4px; font-size: 11px; }
